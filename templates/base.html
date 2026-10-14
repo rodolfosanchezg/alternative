@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Alternative{% endblock %}</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 0; background: #f5f5f4; color: #1c1917; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: #fff; border-bottom: 1px solid #e7e5e4; }
+        header form { display: inline; margin: 0; }
+        main { max-width: 28rem; margin: 2rem 1.5rem; }
+        main.wide { max-width: none; margin: 2rem 1.5rem; }
+        label { display: block; margin-top: 1rem; font-weight: 600; }
+        input[type=email], input[type=password] {width: 100%; padding: 0.5rem; margin-top: 0.25rem; box-sizing: border-box; }
+        button { margin-top: 1.25rem; padding: 0.5rem 1rem; cursor: pointer; }
+        .message { padding: 0.75rem; background: #dcfce7; border-radius: 0.25rem; }
+        .error, .errorlist { color: #b91c1c; }
+        .help { font-size: 0.85rem; color: #57534e; }
+    </style>
+    <script src="{% static 'js/htmx.min.js' %}" defer></script>
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    {% if user.is_authenticated %}
+        <header>
+            <strong>Alternative</strong>
+            <span>
+                {{ user.get_full_name }} - {{ user.get_role_display }}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Sign out</button>
+                </form>
+            </span>
+        </header>
+    {% endif %}
+    <main class="{% block main_class %}{% endblock %}">
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

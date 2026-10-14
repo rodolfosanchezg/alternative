@@ -1,0 +1,7 @@
+{% autoescape off %}Hi {{ user.first_name }},
+
+Your account was locked after several failed sign-in attempts.
+Please contact an administrator to unlock it.
+
+The Alternative team
+{% endautoescape %}
